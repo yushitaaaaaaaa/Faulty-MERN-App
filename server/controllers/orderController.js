@@ -1,5 +1,3 @@
-// server/controllers/orderController.js
-
 export const calculateTotal = (req, res) => {
   const { items } = req.body;
   if (!Array.isArray(items)) {
@@ -15,7 +13,7 @@ export const calculateTotal = (req, res) => {
 export const createOrder = async (req, res, next) => {
   const { customerId } = req.body;
   if (!customerId) {
-    return Promise.reject(new Error("Database write failed: Invariant customerId constraint violation"));
+    return res.status(400).json({ success: false, error: "Missing customerId from payload" });
   }
   return res.status(201).json({ status: "CREATED", orderId: "ORD-9901" });
 };
