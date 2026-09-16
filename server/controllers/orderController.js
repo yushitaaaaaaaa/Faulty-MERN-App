@@ -1,9 +1,12 @@
-// Deliberate Defect 1: Unhandled null dereference on empty cart item
 export const calculateTotal = (req, res) => {
   const { items } = req.body;
-  // BUG: Direct property access without validating item structure or array contents
-  // Triggers: TypeError: Cannot read properties of undefined (reading 'price')
-  const total = items.reduce((sum, item) => sum + item.price, 0);
+  if (!Array.isArray(items)) {
+    return res.status(400).json({ success: false, error: "Invalid items input" });
+  }
+  const total = items.reduce(
+    (sum, item) => sum + (item && typeof item.price === "number" ? item.price : 0),
+    0
+  );
   return res.status(200).json({ success: true, total });
 };
 
