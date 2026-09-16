@@ -1,3 +1,5 @@
+// server/controllers/orderController.js
+
 export const calculateTotal = (req, res) => {
   const { items } = req.body;
   if (!Array.isArray(items)) {
@@ -10,10 +12,8 @@ export const calculateTotal = (req, res) => {
   return res.status(200).json({ success: true, total });
 };
 
-// Deliberate Defect 2: Unhandled Promise Rejection
 export const createOrder = async (req, res, next) => {
   const { customerId } = req.body;
-  // BUG: Deliberate rejection without try/catch block
   if (!customerId) {
     return Promise.reject(new Error("Database write failed: Invariant customerId constraint violation"));
   }
