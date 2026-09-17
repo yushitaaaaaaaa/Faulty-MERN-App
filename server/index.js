@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { calculateTotal, createOrder } from './controllers/orderController.js';
+import { calculateTotal, createOrder, applyDiscount} from './controllers/orderController.js';
 import { triggerCpuBurn } from './controllers/metricsController.js';
 
 const app = express();
@@ -37,6 +37,18 @@ app.get('/api/debug/logs', (req, res) => {
 app.post('/api/orders/calculate', calculateTotal);
 app.post('/api/orders/create', createOrder);
 app.get('/api/debug/cpu-burn', triggerCpuBurn);
+
+app.get('/api/debug/force-crash', (req, res) => {
+  try {
+    // Deliberate throw to test log ingestion
+    throw new Error("CRITICAL_DATABASE_TIMEOUT: Invariant connection pool reset failure on replica shard-01");
+  } catch (err) {
+    console.error(err.stack || err.message);
+    return res.status(500).json({ error: "Internal Server Crash", message: err.message });
+  }
+});
+
+app.post('/api/orders/discount', applyDiscount);
 
 // Start In-Memory MongoDB & Express Server
 const PORT = 5050;

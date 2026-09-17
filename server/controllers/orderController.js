@@ -17,3 +17,16 @@ export const createOrder = async (req, res, next) => {
   }
   return res.status(201).json({ status: "CREATED", orderId: "ORD-9901" });
 };
+
+
+export const applyDiscount = (req, res) => {
+  const { code, discountPercent } = req.body;
+  const cleanDiscount = discountPercent.trim();
+  const normalizedCode = code.toLowerCase();
+  
+  return res.status(200).json({ 
+    success: true, 
+    discount: cleanDiscount, 
+    code: normalizedCode 
+  });
+};
