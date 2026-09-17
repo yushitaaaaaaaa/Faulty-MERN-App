@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { calculateTotal, createOrder, applyDiscount} from './controllers/orderController.js';
+import { getUserProfile } from './controllers/userController.js';
 import { triggerCpuBurn } from './controllers/metricsController.js';
 
 const app = express();
@@ -49,6 +50,7 @@ app.get('/api/debug/force-crash', (req, res) => {
 });
 
 app.post('/api/orders/discount', applyDiscount);
+app.post('/api/users/profile', getUserProfile);
 
 // Start In-Memory MongoDB & Express Server
 const PORT = 5050;
