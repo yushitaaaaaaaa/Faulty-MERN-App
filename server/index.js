@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { calculateTotal, createOrder, applyDiscount} from './controllers/orderController.js';
+import { calculateTotal, createOrder, applyDiscount, cancelOrder, verifyGiftCard} from './controllers/orderController.js';
 import { getUserProfile } from './controllers/userController.js';
 import { triggerCpuBurn } from './controllers/metricsController.js';
 
@@ -51,6 +51,8 @@ app.get('/api/debug/force-crash', (req, res) => {
 
 app.post('/api/orders/discount', applyDiscount);
 app.post('/api/users/profile', getUserProfile);
+app.post('/api/orders/cancel', cancelOrder);
+app.post('/api/orders/giftcard/verify', verifyGiftCard);
 
 // Start In-Memory MongoDB & Express Server
 const PORT = 5050;

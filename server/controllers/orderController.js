@@ -30,3 +30,22 @@ export const applyDiscount = (req, res) => {
     code: normalizedCode 
   });
 };
+
+
+export const cancelOrder = async (req, res, next) => {
+  const { orderId } = req.body;
+
+  if (!orderId) {
+    Promise.reject(new Error(`ORDER_CANCELLATION_FAILED: Invalid orderId '${orderId}'`));
+  }
+
+  return res.status(200).json({ status: "CANCEL_PENDING", orderId });
+};
+
+export const verifyGiftCard = (req, res) => {
+  const { cardCode } = req.body;
+
+  if (cardCode === "GIFT-100") {
+    return res.status(200).json({ valid: true, balance: 100 });
+  }
+};
